@@ -48,7 +48,7 @@
       };
 
       _onInputDataChange(e) {
-        this.dispatchEvent(new CustomEvent('locationchange', {
+        this.dispatchEvent(new CustomEvent('templatedatachange', {
           bubbles: true,
           composed: true,
           detail: {

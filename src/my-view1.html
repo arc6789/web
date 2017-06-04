@@ -12,19 +12,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="ryr-rack-request-form.html" />
 <link rel="import" href="ryr-rack-request-email-preview.html" />
+<link rel="import" href="ryr-email-templatizer.html" />
+<link rel="import" href="ryr-preview.html" />
 
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
       h1 {
         display: inline;
       }
-      ryr-rack-request-form, ryr-rack-request-email-preview {
+      ryr-rack-request-form, ryr-rack-request-email-preview, ryr-preview {
         width: 50%;
         border: solid;
         margin: 10px;
@@ -41,6 +42,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="rack-request">
         <ryr-rack-request-form id="ryrform"></ryr-rack-request-form>
         <ryr-rack-request-email-preview></ryr-rack-request-email-preview>
+        <ryr-email-templatizer htmlrenderedtemplate="{{buffer}}"></ryr-email-templatizer>
+        <ryr-preview previewtitle="Cross component preview" htmlrenderedtemplate="[[buffer]]"></ryr-preview>
       </div>
     </div>
   </template>

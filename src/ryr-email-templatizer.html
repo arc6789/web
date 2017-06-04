@@ -3,18 +3,7 @@
 <!-- External libraries. -->
 <link rel="import" href="../bower_components/mustache.js/mustache.js">
 
-<dom-module id="ryr-rack-request-email-preview">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Email preview</h2>
-    <div id="preview">
-    </div>
-  </template>
-
+<dom-module id="ryr-email-templatizer">
   <!-- Third party libraries. -->
   <script type="text/javascript" src="../lib/js/markup.js"></script>
   <script type="text/javascript" src="../bower_components/showdown/dist/showdown.js"></script>
@@ -29,9 +18,9 @@
      * @polymer
      * @demo demo/index.html
      */
-    class RyrRackRequestEmailPreview extends Polymer.Element {
+    class RyrEmailTemplatizer extends Polymer.Element {
       static get is() {
-        return 'ryr-rack-request-email-preview';
+        return 'ryr-email-templatizer';
       }
 
       static get properties() {
@@ -39,13 +28,17 @@
           templateVars: {
             type: Object,
             value: {}
+          },
+          htmlrenderedtemplate: {
+            type: String,
+            notify: true
           }
         };
       }
 
       connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('templatedatachange', e => this._handleLocationChange(e));
+        window.addEventListener('templatedatachange', e => this._handleTemplateChange(e));
       }
 
       _renderTemplate(templateVars) {
@@ -68,7 +61,7 @@ Request Yo Racks Team
         `;
 
         let templatized = Mark.up(template, templateVars);
-        return this._markdown2html(templatized);
+        return templatized;
       }
 
       _markdown2html(markdown) {
@@ -77,12 +70,14 @@ Request Yo Racks Team
         return htmlRendered;
       }
 
-      _handleLocationChange(e) {
+      _handleTemplateChange(e) {
         this.set('templateVars', e.detail);
-        this.$.preview.innerHTML = this._renderTemplate(this.templateVars);
+        let renderedTemplate = this._renderTemplate(this.templateVars);
+        let htmlTemplate = this._markdown2html(renderedTemplate);
+        this.htmlrenderedtemplate = htmlTemplate;
       }
     }
 
-    window.customElements.define(RyrRackRequestEmailPreview.is, RyrRackRequestEmailPreview);
+    window.customElements.define(RyrEmailTemplatizer.is, RyrEmailTemplatizer);
   </script>
 </dom-module>

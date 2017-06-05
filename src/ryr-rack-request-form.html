@@ -43,7 +43,12 @@
           contactPhone: String,
           contactEmail: String,
           parkingInfo: String,
-          extraInfo: String
+          extraInfo: String,
+          templatevars: {
+            type: Object,
+            computed: '_prepareTemplateVars(rackLocation, businessName, businessAddress, contactName, contactPhone, contactEmail, parkingInfo, extraInfo)',
+            notify: true
+          }
         }
       };
 
@@ -62,6 +67,19 @@
             extraInfo: this.extraInfo
           }
         }));
+      }
+
+      _prepareTemplateVars(rackLocation, businessName, businessAddress, contactName, contactPhone, contactEmail, parkingInfo, extraInfo) {
+        return {
+          rackLocation: rackLocation,
+          businessName: businessName,
+          businessAddress: businessAddress,
+          contactName: contactName,
+          contactPhone: contactPhone,
+          contactEmail: contactEmail,
+          parkingInfo: parkingInfo,
+          extraInfo: extraInfo
+        };
       }
     }
 

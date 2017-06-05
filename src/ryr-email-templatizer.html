@@ -25,9 +25,10 @@
 
       static get properties() {
         return {
-          templateVars: {
+          templatevars: {
             type: Object,
-            value: {}
+            value: {},
+            observer: '_handleTemplateChange'
           },
           htmlrenderedtemplate: {
             type: String,
@@ -36,17 +37,12 @@
         };
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        window.addEventListener('templatedatachange', e => this._handleTemplateChange(e));
-      }
-
       _renderTemplate(templateVars) {
         let template =
           `
 Dear city of Austin,
 
-I would like to have a bike rack here: {{rackLocation | blank>_not provided_}}.
+I would like to have a bike rack here: {{rackLocation | shout |blank>_not provided_}}.
 
 {{if businessName}}The business supporting this demand is {{businessName | blank>_not provided_}}{{if businessAddress }}, located at {{businessAddress | blank>_not provided_}}.{{else}}.{{/if}}{{/if}}
 
@@ -60,7 +56,7 @@ Cheers,
 Request Yo Racks Team
         `;
 
-        let templatized = Mark.up(template, templateVars);
+        let templatized = Mark.up(template, this.templatevars);
         return templatized;
       }
 
@@ -70,11 +66,14 @@ Request Yo Racks Team
         return htmlRendered;
       }
 
-      _handleTemplateChange(e) {
-        this.set('templateVars', e.detail);
-        let renderedTemplate = this._renderTemplate(this.templateVars);
-        let htmlTemplate = this._markdown2html(renderedTemplate);
-        this.htmlrenderedtemplate = htmlTemplate;
+      _handleTemplateChange() {
+        if (Object.keys(this.templatevars).length == 0) {
+          this.htmlrenderedtemplate = '';
+        } else {
+          let renderedTemplate = this._renderTemplate(this.templateVars);
+          let htmlTemplate = this._markdown2html(renderedTemplate);
+          this.htmlrenderedtemplate = htmlTemplate;
+        }
       }
     }
 
